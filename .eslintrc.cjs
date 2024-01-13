@@ -34,6 +34,7 @@ module.exports = {
         '@typescript-eslint/no-use-before-define': 0,
         'no-case-declarations': 0,
         "semi": ["error", "always"],
-        "@typescript-eslint/semi": 0
+        "@typescript-eslint/semi": 0,
+        "@typescript-eslint/strict-boolean-expressions": 0
     }
 }
