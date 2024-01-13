@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './index.module.scss';
 import classNames from 'classnames/bind';
 import { TIME_UNITS, type TimeUnit } from './types';
+import { useTooltip } from '../Tooltip/useTooltip';
 
 const cx = classNames.bind(styles);
 
 const Clock = () => {
   const [date, setDate] = useState<Date>(new Date());
+  const ref = useRef<HTMLDivElement>(null!);
+
+  const { addTooltip, updateTooltipContent } = useTooltip(ref);
 
   /**
    * Get how much clock hand of given tiem unit should be rotated based on current time
@@ -60,9 +64,11 @@ const Clock = () => {
   };
 
   useEffect(() => {
+    addTooltip('');
     const interval = setInterval(() => {
       const current = new Date();
       setDate(current);
+      updateTooltipContent(current.toTimeString());
     });
 
     return () => {
@@ -71,7 +77,10 @@ const Clock = () => {
   }, []);
 
   return (
-    <div className={cx('clock')}>
+    <div
+      ref={ref}
+      className={cx('clock')}
+    >
       <div className={cx('fixing-pin', 'center')} />
       {TIME_UNITS.map(timeUnit => (
         <div
