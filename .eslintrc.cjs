@@ -35,6 +35,7 @@ module.exports = {
         'no-case-declarations': 0,
         "semi": ["error", "always"],
         "@typescript-eslint/semi": 0,
-        "@typescript-eslint/strict-boolean-expressions": 0
+        "@typescript-eslint/strict-boolean-expressions": 0,
+        "react/react-in-jsx-scope": 0,
     }
 }
