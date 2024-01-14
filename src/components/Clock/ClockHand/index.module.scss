@@ -1,0 +1,26 @@
+.clock-hand {
+    $width: 4px;
+    position: absolute;
+    transform-origin: bottom;
+    left: calc(50% - $width / 2);
+    bottom: 50%;
+    width: $width;
+
+    &.clock-hand--hour {
+        height: 20%;
+        background-color: black;
+        z-index: 3;
+    }
+
+    &.clock-hand--minute {
+        height: 30%;
+        background-color: gray;
+        z-index: 2;
+    }
+
+    &.clock-hand--second {
+        height: 40%;
+        background-color: red;
+        z-index: 1;
+    }
+}

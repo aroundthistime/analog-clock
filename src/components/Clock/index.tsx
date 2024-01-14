@@ -3,6 +3,7 @@ import styles from './index.module.scss';
 import classNames from 'classnames/bind';
 import { TIME_UNITS, type TimeUnit } from './types';
 import { useTooltip } from '../Tooltip/useTooltip';
+import ClockHand from './ClockHand';
 
 const cx = classNames.bind(styles);
 
@@ -11,37 +12,6 @@ const Clock = () => {
   const ref = useRef<HTMLDivElement>(null!);
 
   const { addTooltip, updateTooltipContent } = useTooltip(ref);
-
-  /**
-   * Get how much clock hand of given tiem unit should be rotated based on current time
-   * @param {TimeUnit} timeUnit Time unit of the clock hand to measure
-   * @returns {number} Rotation degrees between 0 and 360
-   */
-  const getClockHandRotation = (timeUnit: TimeUnit) => {
-    const MAX_DEGREE = 360;
-
-    /**
-     * Maximum value that the time unit can have
-     */
-    const TIME_UNIT_MAX_VALUE: Record<TimeUnit, number> = {
-      hour: 12,
-      minute: 60,
-      second: 60
-    };
-
-    let currentValue = getTimeUnitValue(timeUnit);
-    const maxValue = TIME_UNIT_MAX_VALUE[timeUnit];
-
-    /**
-     * Remainder operation is required because hour has range of 0~24,
-     * while analog clock has to render in range of 0~12
-     */
-    if (timeUnit === 'hour') {
-      currentValue = currentValue % maxValue;
-    }
-
-    return currentValue / maxValue * MAX_DEGREE;
-  };
 
   /**
    * Extract current value of the given time unit
@@ -83,10 +53,10 @@ const Clock = () => {
     >
       <div className={cx('fixing-pin', 'center')} />
       {TIME_UNITS.map(timeUnit => (
-        <div
-          className={cx('clock-hand', `clock-hand--${timeUnit}`)}
-          style={{ transform: `rotateZ(${getClockHandRotation(timeUnit)}deg)` }}
+        <ClockHand
           key={timeUnit}
+          timeUnit={timeUnit}
+          currentValue={getTimeUnitValue(timeUnit)}
         />
       ))}
     </div>
