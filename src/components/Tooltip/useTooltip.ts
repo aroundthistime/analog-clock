@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useId, useRef } from 'react';
 import { useTooltipContext } from './TooltipProvider';
-import throttle from 'lodash/throttle';
-import { MONITOR_UPDATE_ITERATION } from '../../constants/time';
 
 /**
  * Hook for creating and controlling a tooltip to the system
@@ -52,15 +50,17 @@ export const useTooltip = <T extends HTMLElement>(targetRef: React.MutableRefObj
     targetRef.current.removeEventListener('pointermove', onTargetPointerMove);
   }, [targetRef]);
 
-  const onTargetPointerMove = useCallback(throttle((event: MouseEvent) => {
+  const onTargetPointerMove = useCallback((event: MouseEvent) => {
     if (!tooltipRef.current) return;
 
     // Offset between the cursor and the tooltip (in px)
     const TOOLTIP_OFFSET = 5;
 
-    tooltipRef.current.style.left = `${event.clientX + TOOLTIP_OFFSET}px`;
-    tooltipRef.current.style.top = `${event.clientY - TOOLTIP_OFFSET - tooltipRef.current.clientHeight}px`;
-  }, MONITOR_UPDATE_ITERATION), []);
+    const x = event.clientX + TOOLTIP_OFFSET;
+    const y = event.clientY + TOOLTIP_OFFSET - tooltipRef.current.clientHeight;
+
+    tooltipRef.current.style.transform = `translate(${x}px, ${y}px)`;
+  }, []);
 
   useEffect(() => {
     return () => {
